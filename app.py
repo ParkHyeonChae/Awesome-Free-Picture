@@ -1,39 +1,66 @@
 from flask import Flask, render_template, request, url_for, redirect
 from bs4 import BeautifulSoup
-import lxml
+import requests
 
 app = Flask(__name__) 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        keyword = request.form['keyword']
+        url = "https://pixabay.com/images/search/"+keyword
 
-        url = 'https://unsplash.com/search/photos/'
+        res = requests.post(url)
+        html = res.content
+        soup = BeautifulSoup(html, "html.parser")
 
-        params = {
-            'query': request.form['keyword'],
-            'where': 'post',
-        }
-        response = request.get(url, params=params)
-        html = response.text
+        img_names = soup.find_all('img')
 
-        soup = BeautifulSoup(html, 'html.parser')
+        imgdata = []
+        for img in img_names:
+            imgdata.append(img['src'])
 
-        imagelist = soup.select()
-        # form = GoogleCrawling(request.POST)
-        #     url = 'https://www.google.co.uk/search?hl=en&tbm=isch&q='+form.cleaned_data['keyword']
-        #     html_doc = requests.get(url)
-        #     html = BeautifulSoup(html_doc.text, 'lxml')
-        #     img_tag = html.find_all('img')
-        #     crawling_img = []
-        #     for i in img_tag:
-        #         if 'Image result for' in i.get('alt'):
-        #             crawling_img.append(i.get('src'))
-        # test = request.form['keyword']
-
-        return render_template('index.html', imglist=test)
-            
-    return render_template('index.html')
+        return render_template('index.html', imglist=imgdata)
+    else:
+        return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+# from bs4 import BeautifulSoup
+# import requests
+
+# keyword = input("검색 이미지 : ")
+# url = "https://pixabay.com/images/search/"+keyword
+
+# res = requests.post(url)
+# html = res.content
+# soup = BeautifulSoup(html, "html.parser")
+
+# img_names = soup.find_all('img')
+
+# for img in img_names:
+#     imgdata = img['src']
+#     print (imgdata)
+
+
+# from bs4 import BeautifulSoup
+# import requests
+
+# keyword = input("검색 이미지 : ")
+# url = "https://pixabay.com/images/search/"+keyword
+
+# res = requests.post(url)
+# html = res.content
+# soup = BeautifulSoup(html, "html.parser")
+
+# img_names = soup.find_all('img')
+
+# imgdata = []
+# for img in img_names:
+#     imgdata.append(img['src'])
+
+
+# print (imgdata)
