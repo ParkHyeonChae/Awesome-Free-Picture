@@ -27,10 +27,17 @@ def index():
     else:
         return render_template('index.html')
 
+@app.route('/test')
+def addimg(imglist):
+    if imglist is not None:
+        imgurls = []
+        imgurls.append(imglist)
+        return render_template('test.html', data=imgurls)
+    else:
+        return render_template('test.html', data=imglist)
+
 if __name__ == "__main__":
     app.run(debug=True)
-
-
 
 # from bs4 import BeautifulSoup
 # import requests

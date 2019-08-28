@@ -12,8 +12,21 @@
     <input type = "submit" value = "search"/>
     </form><br>
     {% for img_list in imglist %}
-    <!--<img src= {{img_list}} width="300px" height="300px">-->
-    <input type="image" src={{img_list}} width="300px" height="300px">
+    <script>
+        var img_list = new Array();
+        function test(imglists) {
+            img_list.push(imglists);
+            console.log(img_list);
+        }
+
+        function download() {
+            for (var i=0; i<img_list.length; i++) {
+                console.log(img_list[i]);
+            }
+        }
+    </script>
+    <input type="image" src={{img_list}} width="300px" height="300px" onclick=test(src);>
     {% endfor %}
+    <input type="button" value="download" onclick="download();">
 </body>
 </html>
