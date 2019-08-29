@@ -1,3 +1,35 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Crawling test page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <form action = '/' method = 'POST'>
+    <input type="text" name="keyword" placeholder="테스트 내용 입력" required>
+    <input type = "submit" value = "search"/>
+    </form><br>
+    {% for img_list in imglist %}
+
+    <script type = "text/javascript">
+        var img_list = new Array();
+        function test(imglists) {
+            img_list.push(imglists);
+            console.log(img_list);
+        }
+        function download(){
+            for (var i=0; i<img_list.length; i++) {
+                console.log(img_list[i]);
+            }
+        }
+    </script>
+    
+    <input id="target_image" type="image" src={{img_list}} width="300px" height="300px" onclick=test(src);>
+    {% endfor %}
+    <input type="button" value="download" onclick="download();">
+</body>
+</html>-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,19 +44,21 @@
     <input type = "submit" value = "search"/>
     </form><br>
     {% for img_list in imglist %}
-    <script>
+
+    <script type = "text/javascript">
         var img_list = new Array();
         function test(imglists) {
             img_list.push(imglists);
             console.log(img_list);
         }
-
-        function download() {
+        function download(){
             for (var i=0; i<img_list.length; i++) {
                 console.log(img_list[i]);
             }
+            return img_list
         }
     </script>
+    
     <input type="image" src={{img_list}} width="300px" height="300px" onclick=test(src);>
     {% endfor %}
     <input type="button" value="download" onclick="download();">
