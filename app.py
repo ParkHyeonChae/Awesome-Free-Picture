@@ -1,43 +1,64 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, session
 from bs4 import BeautifulSoup
 import requests
 
-app = Flask(__name__) 
+app = Flask(__name__)
+app.secret_key = 'sample_secret'
+page = 1
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        keyword = request.form['keyword']
-        #total_page = 10
-    #for page in range(total_page):
-        #url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page+1)
-        url = "https://pixabay.com/images/search/"+keyword
+        global page
+        page = 1
+        session['keyword'] = request.form['imgkeyword']
+        keyword = session['keyword']
+        url = "https://pixabay.com/images/search/"+keyword+"/?pagi=1"
 
-        res = requests.post(url)
-        html = res.content
-        soup = BeautifulSoup(html, "html.parser")
-        
-        #img_names = soup.find_all('img')
-        img_names = soup.find_all("div", class_ = "item")
+        imgdata = clawling(url)
 
-        count = 0
-        imgdata = []
-        for img in img_names:
-            if(img.find('img')['src'][0]=='h'):
-                imgdata.append(img.find('a').find('img')['src'])
-            # count+=1
-            # if count == 16: break
-            else:
-                imgdata.append(img.find('a').find('img')['data-lazy'])
-
-        return render_template('index.html', imglist=imgdata)
+        return render_template('index.html', imglist=imgdata, keyword=keyword, tmp=not None)
     else:
         return render_template('index.html')
 
-# def imgsave(imgurl):
-#     imgurllist = []
-#     imgurllist.append(imgurl)
-#     return imgurllist
+@app.route('/nextpage', methods=['POST'])
+def nextpage():
+    global page
+    page += 1
+
+    keyword = session['keyword'] 
+    url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
+    imgdata = clawling(url)
+
+    return render_template('index.html', imglist=imgdata, keyword=keyword, tmp=not None)
+
+@app.route('/previouspage', methods=['POST'])
+def previouspage():
+    global page
+    page -= 1
+    if page == 0:
+        page = 1
+
+    keyword = session['keyword']
+    url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
+    imgdata = clawling(url)
+
+    return render_template('index.html', imglist=imgdata, keyword=keyword, tmp=not None)
+
+def clawling(url):
+    res = requests.post(url)
+    html = res.content
+    soup = BeautifulSoup(html, "html.parser")
+    img_names = soup.find_all("div", class_ = "item")
+
+    imgdata = []
+    for img in img_names:
+        if(img.find('img')['src'][0]=='h'):
+            imgdata.append(img.find('a').find('img')['src'])
+        else:
+            imgdata.append(img.find('a').find('img')['data-lazy'])
+    
+    return imgdata
 
 if __name__ == "__main__":
     app.run(debug=True)
