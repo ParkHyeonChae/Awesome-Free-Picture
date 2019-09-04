@@ -17,9 +17,29 @@ def index():
 
         imgdata = clawling(url)
 
-        return render_template('index.html', imglist=imgdata, keyword=keyword, tmp=not None)
+        return render_template('imglist.html', imglist=imgdata, keyword=keyword, tmp=not None)
     else:
-        return render_template('index.html')
+        return render_template('imglist.html')
+
+@app.route('/icon', methods=['GET', 'POST'])
+def icon():
+    if request.method == 'POST':
+        session['keyword'] = request.form['imgkeyword']
+        keyword = session['keyword']
+        url = "https://iconmonstr.com/?s="+keyword
+        res = requests.post(url)
+        html = res.content
+        soup = BeautifulSoup(html, "html.parser")
+
+        img_names = soup.find_all('img', class_ = "preload")
+
+        imgdata = []
+        for img in img_names:
+            imgdata.append(img['src'])
+
+        return render_template('iconlist.html', imglist=imgdata, keyword=keyword, tmp=not None)
+    else:
+        return render_template('iconlist.html')
 
 @app.route('/nextpage', methods=['POST'])
 def nextpage():
@@ -30,7 +50,7 @@ def nextpage():
     url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
     imgdata = clawling(url)
 
-    return render_template('index.html', imglist=imgdata, keyword=keyword, tmp=not None)
+    return render_template('imglist.html', imglist=imgdata, keyword=keyword, tmp=not None)
 
 @app.route('/previouspage', methods=['POST'])
 def previouspage():
@@ -43,7 +63,7 @@ def previouspage():
     url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
     imgdata = clawling(url)
 
-    return render_template('index.html', imglist=imgdata, keyword=keyword, tmp=not None)
+    return render_template('imglist.html', imglist=imgdata, keyword=keyword, tmp=not None)
 
 def clawling(url):
     res = requests.post(url)
