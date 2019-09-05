@@ -6,23 +6,28 @@ app = Flask(__name__)
 app.secret_key = 'sample_secret'
 page = 1
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
+    return render_template('main.html')
+
+
+@app.route('/imgCrawling', methods=['GET', 'POST'])
+def imgCrawling():
     if request.method == 'POST':
         global page
         page = 1
         session['keyword'] = request.form['imgkeyword']
         keyword = session['keyword']
         url = "https://pixabay.com/images/search/"+keyword+"/?pagi=1"
-
+       
         imgdata = clawling(url)
 
         return render_template('imglist.html', imglist=imgdata, keyword=keyword, tmp=not None)
     else:
         return render_template('imglist.html')
 
-@app.route('/icon', methods=['GET', 'POST'])
-def icon():
+@app.route('/iconCrawling', methods=['GET', 'POST'])
+def iconCrawling():
     if request.method == 'POST':
         session['keyword'] = request.form['imgkeyword']
         keyword = session['keyword']
