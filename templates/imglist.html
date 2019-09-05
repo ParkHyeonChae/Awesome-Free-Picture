@@ -17,12 +17,22 @@
         <input type="submit" value="아이콘검색" formaction='/iconCrawling'>
     </form>
     {% if tmp %}
-    <form id="test" action = '/previouspage' method = 'POST'>
+    <!-- <form id="test" action = '/previouspage' method = 'POST'>
         <input type = "submit" value = "<">
     </form>
     <form id="test" action = '/nextpage' method = 'POST'>
         <input type = "submit"  value = ">">
+    </form> -->
+    
+    <input type="button" value="<" onClick="location.href='/imgCrawling/back/{{pagenum}}'">
+    <input type="button" value=">" onClick="location.href='/imgCrawling/page/{{pagenum}}'">
+    
+    
+    <form method="POST">
+        <input type="text" name="nowpagenum" value="{{nowpage}}" style="width:30px;" required>
+        <input type="submit" value="페이지이동" formaction='/imgCrawling/pagemove'>
     </form>
+    
     {% endif %}
     
     <br>
@@ -46,6 +56,7 @@
     </script>
     
     <input type="image" src={{img_list}} width="300px" height="300px" onclick=test(src);>
+
     {% endfor %}
     {% if tmp %}
     <br><input type="button" value="download" onclick="download();">
