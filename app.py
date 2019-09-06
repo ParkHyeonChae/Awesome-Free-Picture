@@ -4,34 +4,31 @@ import requests
 
 app = Flask(__name__)
 app.secret_key = 'sample_secret'
-_page = 1
+nowpage = 1
 a = 0
 b = 9
 imgdata = []
 viewdata = imgdata[a:b]
+
 @app.route('/')
 def index():
     return render_template('main.html')
 
-@app.route('/imgCrawling', methods=['GET', 'POST'])
+@app.route('/imgCrawling', methods=['POST'])
 def imgCrawling():
     if request.method == 'POST':
-        # global page
-        # page = 1
-        # imgdata = []
-        global imgdata, _page
+        global imgdata, nowpage
         imgdata = []
-        _page = 1
+        nowpage = 1
         for page in range(1,5):
             session['keyword'] = request.form['imgkeyword']
             keyword = session['keyword']
             url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
-        
             imgdata.extend(clawling(url))
         
-        viewdata = imgdata[a:b]
+        viewlist()
         
-        return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=_page, nowpage=1)
+        return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=nowpage)
     else:
         return render_template('imglist.html')
 
@@ -55,89 +52,35 @@ def iconCrawling():
     else:
         return render_template('iconlist.html')
 
-@app.route('/imgCrawling/page/<pagenum>', methods=['GET','POST'])
-def page(pagenum):
-    # global page
-    # page += 1
+@app.route('/imgCrawling/nextpage', methods=['GET','POST'])
+def nextpage():
+    keyword = session['keyword']    
+    global nowpage
+    nowpage += 1
 
+    viewlist()
+
+    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=nowpage)
+
+@app.route('/imgCrawling/backpage', methods=['POST','GET'])
+def backpage():
     keyword = session['keyword'] 
-    # url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
-    # imgdata = clawling(url)
+    global nowpage
+    nowpage -= 1
+    if nowpage < 1:nowpage = 1
 
-    # return render_template('imglist.html', imglist=imgdata, keyword=keyword, tmp=not None)
-    
-    global a, b, imgdata, _page, viewdata
-    _page = _page + 1
-    a = (int(pagenum)-1) * 9 
-    b = int(pagenum) * 9
-    
-    viewdata = imgdata[a:b]
-    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=_page, nowpage=_page)
+    viewlist()
 
-@app.route('/imgCrawling/back/<pagenum>', methods=['POST','GET'])
-def back(pagenum):
-    keyword = session['keyword'] 
-    global a, b, imgdata, _page, viewdata
-    _page = _page - 1
-    a = (int(pagenum)-1) * 9 
-    b = int(pagenum) * 9
-    
-    viewdata = imgdata[a:b]
-    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=_page, nowpage=_page)
+    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=nowpage)
 
-@app.route('/imgCrawling/pagemove', methods=['POST','GET'])
+@app.route('/imgCrawling/pagemove', methods=['POST'])
 def pagemove():
     keyword = session['keyword'] 
-    pagenum = request.form['nowpagenum']
-    _page = pagenum
-    global a, b, imgdata, viewdata
+    global nowpage
+    nowpage = int(request.form['nowpagenum'])
+    viewlist()
 
-    a = (int(pagenum)-1) * 9 
-    b = int(pagenum) * 9
-    
-    viewdata = imgdata[a:b]
-    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=_page) 
-
-
-@app.route('/nextpage', methods=['POST'])
-def nextpage():
-    # global page
-    # page += 1
-
-    keyword = session['keyword'] 
-    # url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
-    # imgdata = clawling(url)
-
-    # return render_template('imglist.html', imglist=imgdata, keyword=keyword, tmp=not None)
-    
-    global a, b, imgdata, _page
-    a += 9
-    b += 9
-    _page += 1
-    viewdata = imgdata[a:b]
-    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None)
-
-@app.route('/previouspage', methods=['POST'])
-def previouspage():
-    # global page
-    # page -= 1
-    # if page == 0:
-    #     page = 1
-
-    keyword = session['keyword']
-    # url = "https://pixabay.com/images/search/"+keyword+"/?pagi=%d"%(page)
-    # imgdata = clawling(url)
-    global a, b, imgdata, page
-
-    if a > 0:
-        a -= 9
-        b -= 9
-        page -= 1
-    else:
-        a = 0
-        b = 9
-    viewdata = imgdata[a:b]
-    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None)
+    return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=nowpage) 
 
 def clawling(url):
     res = requests.post(url)
@@ -153,6 +96,15 @@ def clawling(url):
             imgdata.append(img.find('a').find('img')['data-lazy'])
         
     return imgdata
+
+def viewlist():
+    global a, b, nowpage, viewdata, imgdata
+
+    a = (int(nowpage)-1) * 9 
+    b = int(nowpage) * 9
+    viewdata = imgdata[a:b]
+    
+    return viewdata
 
 if __name__ == "__main__":
     app.run(debug=True)

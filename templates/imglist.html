@@ -16,25 +16,17 @@
         <input type="submit" value="이미지검색" formaction='/imgCrawling'>
         <input type="submit" value="아이콘검색" formaction='/iconCrawling'>
     </form>
-    {% if tmp %}
-    <!-- <form id="test" action = '/previouspage' method = 'POST'>
-        <input type = "submit" value = "<">
-    </form>
-    <form id="test" action = '/nextpage' method = 'POST'>
-        <input type = "submit"  value = ">">
-    </form> -->
-    
-    <input type="button" value="<" onClick="location.href='/imgCrawling/back/{{pagenum}}'">
-    <input type="button" value=">" onClick="location.href='/imgCrawling/page/{{pagenum}}'">
-    
+
+    {% if tmp %} 
+    <input type="button" value="<" onClick="location.href='/imgCrawling/backpage'">
+    <input type="button" value=">" onClick="location.href='/imgCrawling/nextpage'">
     
     <form method="POST">
-        <input type="text" name="nowpagenum" value="{{nowpage}}" style="width:30px;" required>
+        <input type="number" name="nowpagenum" value="{{pagenum}}" min="1" style="width:30px;" required>
         <input type="submit" value="페이지이동" formaction='/imgCrawling/pagemove'>
     </form>
-    
     {% endif %}
-    
+
     <br>
     {% if tmp %}
     검색어 : {{keyword}}<br>
