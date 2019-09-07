@@ -4,23 +4,26 @@
     <title>Crawling test page</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style type="text/css">
-            #test {
+        <style>
+            .viewsort {
                 display: inline;
             }
         </style>
 </head>
 <body>
-    <form method='POST'>
+    <form method='POST' class="viewsort">
         <input type="text" name="imgkeyword" placeholder="테스트 내용 입력" value="{{keyword}}" required>
         <input type="submit" value="이미지검색" formaction='/imgCrawling'>
         <input type="submit" value="아이콘검색" formaction='/iconCrawling'>
     </form>
 
-    {% if tmp %} 
-    <input type="button" value="<" onClick="location.href='/imgCrawling/backpage'">
-    <input type="button" value=">" onClick="location.href='/imgCrawling/nextpage'">
-    
+    {% if tmp %}
+    <input type="button" value="다운로드" onclick="download();">
+
+    <div>
+        <input type="button" value="<" onClick="location.href='/imgCrawling/backpage'">
+        <input type="button" value=">" onClick="location.href='/imgCrawling/nextpage'">
+    </div>
     <form method="POST">
         <input type="number" name="nowpagenum" value="{{pagenum}}" min="1" style="width:30px;" required>
         <input type="submit" value="페이지이동" formaction='/imgCrawling/pagemove'>
@@ -46,12 +49,11 @@
             return img_list
         }
     </script>
-    
-    <input type="image" src={{img_list}} width="300px" height="300px" onclick=test(src);>
-
+    <div style="width:920px">
+        <div class="viewsort" style="float:left; width:33%">
+            <input type="image" src={{img_list}} width="300px" height="300px" onclick=test(src);>
+        </div>
+    </div>
     {% endfor %}
-    {% if tmp %}
-    <br><input type="button" value="download" onclick="download();">
-    {% endif %}
 </body>
 </html>
