@@ -1,0 +1,32 @@
+/* html,
+body,
+header,
+
+.viewsort {
+    display:inline;
+}
+.layout {
+    width:1225px;
+    margin:0 auto;
+} */
+
+html,
+body,
+header,
+
+.viewsort {
+    display:inline;
+}
+.margin{
+    margin:10px;
+}
+.imglist {
+    display:inline;
+}
+.imglist:hover {
+    transform:scale(1.1);
+}
+.layout {
+    width:1225px;
+    margin:0 auto;
+}
