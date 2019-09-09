@@ -27,7 +27,7 @@ def imgCrawling():
             imgdata.extend(clawling(url))
         
         viewlist()
-        
+        print(viewdata)
         return render_template('imglist.html', imglist=viewdata, keyword=keyword, tmp=not None, pagenum=nowpage)
     else:
         return render_template('imglist.html')
@@ -91,9 +91,9 @@ def clawling(url):
     imgdata = []
     for img in img_names:
         if(img.find('img')['src'][0]=='h'):
-            imgdata.append(img.find('a').find('img')['src'])
+            imgdata.append(img.find('a').find('img')['src'][:-8]+"1280.jpg") 
         else:
-            imgdata.append(img.find('a').find('img')['data-lazy'])
+            imgdata.append(img.find('a').find('img')['data-lazy'][:-8]+"1280.jpg")
         
     return imgdata
 
