@@ -90,10 +90,17 @@ def clawling(url):
 
     imgdata = []
     for img in img_names:
-        if(img.find('img')['src'][0]=='h'):
-            imgdata.append(img.find('a').find('img')['src'][:-8]+"1280.jpg") 
+        if(img.find('img')['src'][0:4]=='http' and img.find('img')['src'][-3:]=='jpg'):
+            imgdata.append(img.find('a').find('img')['src'][:-8]+"1280.jpg")
+
+        elif(img.find('img')['src'][0:4]=='http' and img.find('img')['src'][-3:]=='png'):
+            imgdata.append(img.find('a').find('img')['src'][:-8]+"1280.png")
+
         else:
-            imgdata.append(img.find('a').find('img')['data-lazy'][:-8]+"1280.jpg")
+            if(img.find('img')['data-lazy'][-3:]=='jpg'):
+                imgdata.append(img.find('a').find('img')['data-lazy'][:-8]+"1280.jpg")
+            else:
+                imgdata.append(img.find('a').find('img')['data-lazy'][:-8]+"1280.png")
         
     return imgdata
 
