@@ -15,13 +15,14 @@
         <input type="text" name="imgkeyword" placeholder="테스트 내용 입력" value="{{keyword}}" required>
         <input type="submit" value="이미지검색" formaction='/imgCrawling'>
         <input type="submit" value="아이콘검색" formaction='/iconCrawling'>
+        <input type="submit" value="동영상검색" formaction='/videoCrawling'>
     </form>
        
     <br>
     {% if tmp %}
     검색어 : {{keyword}}<br>
     {% endif %}
-    {% for img_list in imglist %}
+    {% for view_list in viewlist %}
 
     <script type = "text/javascript">
         var img_list = new Array();
@@ -37,7 +38,7 @@
         }
     </script>
     
-    <input type="image" src={{img_list}} width="100px" height="100px" onclick=test(src);>
+    <input type="image" src={{view_list}} width="100px" height="100px" onclick=test(src);>
     {% endfor %}
     {% if tmp %}
     <br><input type="button" value="download" onclick="download();">

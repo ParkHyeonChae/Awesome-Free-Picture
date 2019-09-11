@@ -1,0 +1,121 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Crawling test page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <form method='POST' class="viewsort">
+        <input type="text" name="imgkeyword" placeholder="테스트 내용 입력" value="{{keyword}}" required>
+        <input type="submit" value="이미지검색" formaction='/imgCrawling'>
+        <input type="submit" value="아이콘검색" formaction='/iconCrawling'>
+    </form>
+
+    {% if tmp %}
+    <input type="button" value="다운로드" onclick="download();">
+
+    <div>
+        <input type="button" value="<" onClick="location.href='/imgCrawling/backpage'">
+        <input type="button" value=">" onClick="location.href='/imgCrawling/nextpage'">
+    </div>
+    <form method="POST">
+        <input type="number" name="nowpagenum" value="{{pagenum}}" min="1" style="width:30px;" required>
+        <input type="submit" value="페이지이동" formaction='/imgCrawling/pagemove'>
+    </form>
+    {% endif %}
+
+    <br>
+    {% if tmp %}
+    검색어 : {{keyword}}<br>
+    {% endif %}
+    {% for img_list in imglist %}
+
+    <script type = "text/javascript">
+        var img_list = new Array();
+        function test(imglists) {
+            img_list.push(imglists);
+            console.log(img_list);
+        }
+        function download(){
+            for (var i=0; i<img_list.length; i++) {
+                console.log(img_list[i]);
+            }
+            return img_list
+        }
+    </script>
+    <div class="layout">
+        <div class="viewsort" style="float:left; width:33%">
+            <input type="image" src={{img_list}} width="400px" height="300px" onclick=test(src);>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crawling test page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/lightbox.min.css">
+    <script type="text/javascript" src="/static/js/lightbox-plus-jquery.min.js"></script>
+</head>
+
+<body>
+    <form method='POST' class="viewsort">
+        <input type="text" name="imgkeyword" placeholder="테스트 내용 입력" value="{{keyword}}" required>
+        <input type="submit" value="이미지검색" formaction='/imgCrawling'>
+        <input type="submit" value="아이콘검색" formaction='/iconCrawling'>
+        <input type="submit" value="동영상검색" formaction='/videoCrawling'>
+    </form>
+
+    {% if tmp %}
+    <input type="button" value="다운로드" onclick="download();">
+
+    <div class="margin">
+        <input type="button" value="<" onClick="location.href='/backpage'">
+        <input type="button" value=">" onClick="location.href='/nextpage'">
+    </div>
+    <form method="POST" class="margin">
+        <input type="number" name="nowpagenum" value="{{pagenum}}" min="1" style="width:30px;" required>
+        <input type="submit" value="페이지이동" formaction='/pagemove'>
+    </form>
+    {% endif %}
+
+    {% if tmp %}
+    &nbsp&nbsp검색어 : {{keyword}}<br><br>
+    {% endif %}
+    {% for view_list in viewlist %}
+
+    <script>
+        var img_list = new Array();
+
+        function test(imglists) {
+            img_list.push(imglists);
+            console.log(img_list);
+        }
+
+        function download() {
+            for (var i = 0; i < img_list.length; i++) {
+                console.log(img_list[i]);
+            }
+            return img_list
+        }
+    </script>
+
+    <div class="layout">
+        <div class="imglist" style="float:left; width:33%">
+            <video id="myVideo" src="{{view_list}}" controls autoplay width="400px" height="230px" onclick=test(src);></video>
+        </div>
+    </div>
+
+    {% endfor %}
+</body>
+
+</html>
