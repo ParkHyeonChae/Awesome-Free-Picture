@@ -1,61 +1,5 @@
+<!-- 프론트 적용 전-->
 <!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Crawling test page</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <form method='POST' class="viewsort">
-        <input type="text" name="imgkeyword" placeholder="테스트 내용 입력" value="{{keyword}}" required>
-        <input type="submit" value="이미지검색" formaction='/imgCrawling'>
-        <input type="submit" value="아이콘검색" formaction='/iconCrawling'>
-    </form>
-
-    {% if tmp %}
-    <input type="button" value="다운로드" onclick="download();">
-
-    <div>
-        <input type="button" value="<" onClick="location.href='/imgCrawling/backpage'">
-        <input type="button" value=">" onClick="location.href='/imgCrawling/nextpage'">
-    </div>
-    <form method="POST">
-        <input type="number" name="nowpagenum" value="{{pagenum}}" min="1" style="width:30px;" required>
-        <input type="submit" value="페이지이동" formaction='/imgCrawling/pagemove'>
-    </form>
-    {% endif %}
-
-    <br>
-    {% if tmp %}
-    검색어 : {{keyword}}<br>
-    {% endif %}
-    {% for img_list in imglist %}
-
-    <script type = "text/javascript">
-        var img_list = new Array();
-        function test(imglists) {
-            img_list.push(imglists);
-            console.log(img_list);
-        }
-        function download(){
-            for (var i=0; i<img_list.length; i++) {
-                console.log(img_list[i]);
-            }
-            return img_list
-        }
-    </script>
-    <div class="layout">
-        <div class="viewsort" style="float:left; width:33%">
-            <input type="image" src={{img_list}} width="400px" height="300px" onclick=test(src);>
-        </div>
-    </div>
-    {% endfor %}
-</body>
-</html> -->
-
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -95,12 +39,10 @@
 
     <script>
         var img_list = new Array();
-
         function test(imglists) {
             img_list.push(imglists);
             console.log(img_list);
         }
-
         function download() {
             for (var i = 0; i < img_list.length; i++) {
                 console.log(img_list[i]);
@@ -118,5 +60,104 @@
 
     {% endfor %}
 </body>
+</html> -->
 
+
+<!-- 프론트 적용 후-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Crawling test page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type=text/css href="/static/css/style.css?ver=1">
+    <link rel="stylesheet" href="/static/css/lightbox.min.css">
+    <script type="text/javascript" src="/static/js/lightbox-plus-jquery.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" onclick="javascript:document.icon.submit();">Image<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:;" onclick="javascript:document.icon.submit();">Icon</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:;" onclick="javascript:document.video.submit();">Video</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:;">About</a>
+                </li>
+                </ul>
+           
+                <form class="form-inline my-2 my-lg-0" method="POST">
+                <input class="form-control mr-sm-2" type="text" name="imgkeyword" placeholder="Search photos" value="{{keyword}}" required>
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" formaction='/imgCrawling'>Search</button>
+                </form>
+            </div>
+        </nav>
+        <form method='POST' action="/imgCrawling" name="img">
+            <input type="hidden" name="imgkeyword" value="{{keyword}}">
+        </form>
+        <form method='POST' action="/iconCrawling" name="icon">
+            <input type="hidden" name="imgkeyword" value="{{keyword}}">
+        </form>
+        <form method='POST' action="/videoCrawling" name="video">
+            <input type="hidden" name="imgkeyword" value="{{keyword}}">
+        </form>
+
+    {% if tmp %}
+    <br>
+    <div class="keywordlayout">
+        <a class="display-4 font-weight-bold">{{keyword}}</a>
+    </div>
+    <div class="pagebuttonlayout" align="right">
+    <form method='POST' action="/pagemove" name="pagemove">
+        <a href="javascript:;" style="color:black" onclick="javascript:document.pagemove.submit();">Go to Page</a>
+        <input type="number" name="nowpagenum" value="{{pagenum}}" min="1" style="width:30px; height:20px" required>
+    </form>
+    </div><br>
+    {% endif %}
+
+    {% for view_list in viewlist %}
+    <script>
+        var img_list = new Array();
+
+        function test(imglists) {
+            img_list.push(imglists);
+            console.log(img_list);
+        }
+
+        function download() {
+            for (var i = 0; i < img_list.length; i++) {
+                console.log(img_list[i]);
+            }
+            return img_list
+        }
+    </script>
+
+    <div class="layout">
+        <div class="imglist" style="float:left; width:33%">
+            <a href="{{view_list}}" data-lightbox="imglist"><input type="image" src={{view_list}} width="98.3%" height="250px" onclick=test(src);></a>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if tmp %}
+        <button class="pagebtn" onClick="location.href='/backpage'" style="position: absolute; top:70%; left:30px"><img class="pagebtn-img" src="/static/images/prev.png">
+        <button class="pagebtn" onClick="location.href='/nextpage'" style="position: absolute; top:70%; right:30px"><img class="pagebtn-img" src="/static/images/next.png">
+    {% endif %}
+    
+</body>
 </html>

@@ -27,6 +27,27 @@ header,
     transform:scale(1.1);
 }
 .layout {
-    width:1225px;
+    width:81%;
     margin:0 auto;
+}
+.keywordlayout {
+    margin-left:9.3%;
+}
+.pagebuttonlayout {
+    margin-right:10.7%;
+    margin-bottom: -1%;
+}
+.pagebtn{
+    background-color: white;
+    border:none;
+    
+}
+.pagebtn-img{
+    background-color: white;
+    cursor: pointer;
+    border:none;
+
+}
+.pagebtn-img:hover{
+    transform: scale(1.3);
 }
