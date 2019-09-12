@@ -26,6 +26,9 @@ header,
 .imglist:hover {
     transform:scale(1.1);
 }
+.videolist{
+    display:inline;
+}
 .layout {
     width:81%;
     margin:0 auto;
@@ -39,14 +42,15 @@ header,
 }
 .pagebtn{
     background-color: white;
-    border:none;
-    
+    border:none;    
+}
+.pagebtn:focus{
+    outline:none;
 }
 .pagebtn-img{
-    background-color: white;
+    background: white;
     cursor: pointer;
     border:none;
-
 }
 .pagebtn-img:hover{
     transform: scale(1.3);

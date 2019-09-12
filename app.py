@@ -62,7 +62,10 @@ def iconCrawling():
         for img in img_names:
             data.append(img['src'])
 
-        return render_template('iconlist.html', viewlist=data, keyword=keyword, tmp=not None)
+        if not data: 
+            return render_template('error.html')
+        else:
+            return render_template('iconlist.html', viewlist=data, keyword=keyword, tmp=not None)
     else:
         return render_template('iconlist.html')
 
