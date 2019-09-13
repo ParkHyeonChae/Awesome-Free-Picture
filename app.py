@@ -7,14 +7,15 @@ app.secret_key = 'sample_secret'
 nowpage = 1
 a = 0
 b = 9
-data = []
-viewdata = data[a:b]
-viewtype = ''
+data = [] # 크롤링된 경로 저장
+viewdata = data[a:b] # 한 페이지당 3x3 출력과 페이지 이동시 출력
+viewtype = '' # gif, png, jpg, mp4 구분
 
 @app.route('/')
 def index():
     return render_template('main.html')
 
+# pixabay 사이트의 검색된 이미지 jpg, png 싹 다 긁어오기, 1280크기로 강제 변환, 페이지당 100장
 @app.route('/imgCrawling', methods=['POST'])
 def imgCrawling():
     if request.method == 'POST':
@@ -36,7 +37,7 @@ def imgCrawling():
                 elif(img.find('img')['src'][0:4]=='http' and img.find('img')['src'][-3:]=='png'):
                     data.append(img.find('a').find('img')['src'][:-8]+'1280.png')
 
-                else:
+                else: # pixabay 사이트 페이지당 16장까지는 src속성이지만 이후는 data-lazy속성임
                     if(img.find('img')['data-lazy'][-3:]=='jpg'):
                         data.append(img.find('a').find('img')['data-lazy'][:-8]+'1280.jpg')
                     else:
@@ -48,6 +49,7 @@ def imgCrawling():
     else:
         return render_template('imglist.html')
 
+# iconmonstr 사이트 아이콘 크롤링
 @app.route('/iconCrawling', methods=['GET', 'POST'])
 def iconCrawling():
     if request.method == 'POST':
@@ -69,6 +71,7 @@ def iconCrawling():
     else:
         return render_template('iconlist.html')
 
+# pixabay 사이트 동영상 100장 크롤링
 @app.route('/videoCrawling', methods=['GET', 'POST'])
 def videoCrawling():
     if request.method == 'POST':
@@ -142,6 +145,7 @@ def keyword_():
     keyword = session['keyword']
     return keyword
 
+# 페이지 이동시 페이지당 9장 출력
 def viewlist():
     global a, b, nowpage, viewdata, data
     a = (int(nowpage)-1) * 9 
