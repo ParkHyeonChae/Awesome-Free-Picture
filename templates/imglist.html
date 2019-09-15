@@ -147,15 +147,15 @@
 
     <div class="layout">
         <div class="imglist" style="float:left; width:33%">
-            <a href="{{view_list}}" data-lightbox="imglist"><input type="image" src={{view_list}} width="98.3%" height="250px" onclick=test(src);></a>
+            <a href="{{view_list}}" data-lightbox="imglist"><input type="image" src={{view_list}} width="98.3%" height="270px" onclick=test(src);></a>
         </div>
     </div>
     {% endfor %}
 
     {% if tmp %}
-    <button class="pagebtn" onClick="location.href='/backpage'" style="position: absolute; top:70%; left:2.7%">
+    <button class="pagebtn" onClick="location.href='/backpage'" style="position: absolute; top:55%; left:2.7%">
         <img class="pagebtn-img" src="/static/images/prev.png" width="100%" height="60px">
-    <button class="pagebtn" onClick="location.href='/nextpage'" style="position: absolute; top:70%; right:4%">
+    <button class="pagebtn" onClick="location.href='/nextpage'" style="position: absolute; top:55%; right:4%">
         <img class="pagebtn-img" src="/static/images/next.png" width="100%" height="60px">
 
     {% endif %}
